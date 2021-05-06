@@ -1,15 +1,17 @@
+
 import React, { useState } from 'react';
-import { Button, Form, Container, Navbar } from 'react-bootstrap'; // new
-import { LinkContainer } from 'react-router-bootstrap'; // new
+import axios from 'axios';
+import {
+  Button, Container, Form, Nav, Navbar
+} from 'react-bootstrap'; // changed
+import { LinkContainer } from 'react-router-bootstrap';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
 
-import axios from 'axios';
-
+import { isDriver, isRider } from './services/AuthService'; // new
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
-
-import Driver from './components/Driver.js';
-import Rider from './components/Rider.js';
+import Driver from './components/Driver';
+import Rider from './components/Rider';
 
 import './App.css';
 
@@ -64,22 +66,38 @@ function App () {
           <Route exact path='/' render={() => (
             <div className='middle-center'>
               <h1 className='landing logo'>Taxi</h1>
-                {
-                  !isLoggedIn &&
+              {
+                !isLoggedIn && (
+                  <>
+                    <Link
+                      id='signUp'
+                      className='btn btn-primary'
+                      to='/sign-up'
+                    >Sign up</Link>
+                    <Link
+                      id='logIn'
+                      className='btn btn-primary'
+                      to='/log-in'
+                    >Log in</Link>
+                  </>
+                )
+              }
+              {
+                isRider() && (
                   <Link
-                    id='signUp'
                     className='btn btn-primary'
-                    to='/sign-up'
-                  >Sign up</Link>
-                }
-                {
-                  !isLoggedIn &&
+                    to='/rider'
+                  >Dashboard</Link>
+                )
+              }
+              {
+                isDriver() && (
                   <Link
-                    id='logIn'
                     className='btn btn-primary'
-                    to='/log-in'
-                  >Log in</Link>
-                }
+                    to='/driver'
+                  >Dashboard</Link>
+                )
+              }
             </div>
           )} />
           <Route path='/sign-up' render={() => (

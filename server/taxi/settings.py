@@ -29,7 +29,8 @@ SECRET_KEY = 's2b%i$m=+bxwhl*w00tv46#21j_3dt2-8z26!bd5hsddhi4%&7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# This added for ability to use app within LAN
+ALLOWED_HOSTS = ['192.168.2.138']
 
 
 # Application definition

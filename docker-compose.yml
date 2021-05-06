@@ -37,7 +37,8 @@ services:
       - ./client:/usr/src/app
     environment:  # for hot-reloading
       - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_BASE_URL=http://localhost:8003 # Client is not able to ask server without this 
+      - REACT_APP_BASE_URL=http://192.168.2.138:8003
+      #- REACT_APP_BASE_URL=http://localhost:8003 # Client is not able to ask server without this 
                                                  # variable
 
 
