@@ -1,4 +1,4 @@
-./client/images/*
-./server/media/*
-./client/cypress/images/*
-./client/node_modules/*
+/client/images/
+/server/media/
+/client/cypress/images/
+/client/node_modules/
