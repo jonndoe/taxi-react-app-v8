@@ -1,49 +1,25 @@
 const faker = require('faker');
 
-const randomEmail = faker.internet.email();
-
+// changed
+const email = faker.internet.email();
+const firstName = faker.name.firstName();
+const lastName = faker.name.lastName();
 
 const logIn = () => {
-  const { username, password } = Cypress.env('credentials');
-
   // Capture HTTP requests.
   cy.intercept('POST', 'log_in').as('logIn');
 
   // Log into the app.
   cy.visit('/#/log-in');
-  cy.get('input#username').type(randomEmail);
-  cy.get('input#password').type(password, { log: false });
+  cy.get('input#username').type(email);  // changed
+  cy.get('input#password').type('pAssw0rd', { log: false });  // changed
   cy.get('button').contains('Log in').click();
   cy.wait('@logIn');
 };
 
 describe('Authentication', function () {
-
-
-
   it('Can sign up.', function () {
-    // new
-    cy.intercept('POST', 'sign_up').as('signUp');
-
-    cy.visit('/#/sign-up');
-    cy.get('input#username').type(randomEmail);
-    cy.get('input#firstName').type('Gary');
-    cy.get('input#lastName').type('Cole');
-    cy.get('input#password').type('pAssw0rd', { log: false });
-    cy.get('select#group').select('driver');
-
-    // Handle file upload
-    cy.get('input#photo').readFile('images/photo.jpg');
-
-    cy.get('button').contains('Sign up').click();
-    cy.wait('@signUp'); // new
-    cy.hash().should('eq', '#/log-in');
-  });
-
-  it('Cannot visit the login page when logged in.', function () {
-    logIn();
-    cy.visit('/#/log-in');
-    cy.hash().should('eq', '#/');
+    cy.addUser(email, firstName, lastName, 'rider');
   });
 
   it('Cannot visit the sign up page when logged in.', function () {
@@ -51,42 +27,6 @@ describe('Authentication', function () {
     cy.visit('/#/sign-up');
     cy.hash().should('eq', '#/');
   });
-
-  it('Cannot see links when logged in.', function () {
-    logIn();
-    cy.get('button#signUp').should('not.exist');
-    cy.get('button#logIn').should('not.exist');
-  });
-
-  it('Shows an alert on login error.', function () {
-    const { username, password } = Cypress.env('credentials');
-    cy.intercept('POST', 'log_in', {
-      statusCode: 400,
-      body: {
-        '__all__': [
-          'Please enter a correct username and password. ' +
-          'Note that both fields may be case-sensitive.'
-        ]
-      }
-    }).as('logIn');
-    cy.visit('/#/log-in');
-    cy.get('input#username').type(randomEmail);
-    cy.get('input#password').type(password, { log: false });
-    cy.get('button').contains('Log in').click();
-    cy.wait('@logIn');
-    cy.get('div.alert').contains(
-      'Please enter a correct username and password. ' +
-      'Note that both fields may be case-sensitive.'
-    );
-    cy.hash().should('eq', '#/log-in');
-  });
-
-  it('Can log in.', function () {
-    logIn();
-    cy.hash().should('eq', '#/');
-    cy.get('button').contains('Log out');
-  });
-
 
   it('Can log out.', function () {
     logIn();
@@ -106,7 +46,7 @@ describe('Authentication', function () {
       }
     }).as('signUp');
     cy.visit('/#/sign-up');
-    cy.get('input#username').type(randomEmail);
+    cy.get('input#username').type(email);  // changed
     cy.get('input#firstName').type('Gary');
     cy.get('input#lastName').type('Cole');
     cy.get('input#password').type('pAssw0rd', { log: false });
@@ -122,4 +62,43 @@ describe('Authentication', function () {
     cy.hash().should('eq', '#/sign-up');
   });
 
+  it('Can log in.', function () {
+    logIn();
+    cy.hash().should('eq', '#/');
+    cy.get('button').contains('Log out');
+  });
+
+  it('Cannot visit the login page when logged in.', function () {
+    logIn();
+    cy.visit('/#/log-in');
+    cy.hash().should('eq', '#/');
+  });
+
+  it('Cannot see links when logged in.', function () {
+    logIn();
+    cy.get('button#signUp').should('not.exist');
+    cy.get('button#logIn').should('not.exist');
+  });
+
+  it('Shows an alert on login error.', function () {
+    cy.intercept('POST', 'log_in', {
+      statusCode: 400,
+      body: {
+        '__all__': [
+          'Please enter a correct username and password. ' +
+          'Note that both fields may be case-sensitive.'
+        ]
+      }
+    }).as('logIn');
+    cy.visit('/#/log-in');
+    cy.get('input#username').type(email);  // changed
+    cy.get('input#password').type('pAssw0rd', { log: false });  // changed
+    cy.get('button').contains('Log in').click();
+    cy.wait('@logIn');
+    cy.get('div.alert').contains(
+      'Please enter a correct username and password. ' +
+      'Note that both fields may be case-sensitive.'
+    );
+    cy.hash().should('eq', '#/log-in');
+  });
 });
