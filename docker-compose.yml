@@ -1,0 +1,62 @@
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+
+  taxi-server:
+    build:
+      context: ./server
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: taxi-server
+    depends_on:
+      - taxi-redis
+      - taxi-database # new
+    environment:
+      - PGDATABASE=taxi # new
+      - PGUSER=taxi # new
+      - PGPASSWORD=taxi # new
+      - PGHOST=taxi-database # new
+      - REDIS_URL=redis://taxi-redis:6379/0
+    ports:
+      - 8003:8000
+    volumes: # for hot-reloading
+      - ./server:/usr/src/app
+
+  taxi-client:
+    build:
+      context: ./client
+    command: npm start
+    container_name: taxi-client
+    depends_on:
+      - taxi-server
+    ports:
+      - 3001:3000
+    stdin_open: true
+    volumes:    # for hot-reloading
+      - ./client:/usr/src/app
+    environment:  # for hot-reloading
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BASE_URL=http://localhost:8003 # Client is not able to ask server without this 
+                                                 # variable
+
+
+  taxi-redis:
+    container_name: taxi-redis
+    image: redis:6-alpine
+
+  # new
+  taxi-database:
+    container_name: taxi-database
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=taxi
+      - POSTGRES_PASSWORD=taxi
+    expose:
+      - 5432
+    volumes:
+      - taxi-database3:/var/lib/postgresql/data
+
+# new
+volumes:
+  taxi-database3:

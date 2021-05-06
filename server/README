@@ -1,0 +1,8 @@
+
+
+
+### RUN:   export PGPASSWORD=taxi
+           export PGUSER=taxi
+           export PGDATABASE=taxi
+
+           to get connection to database.

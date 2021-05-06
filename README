@@ -1,0 +1,19 @@
+
+from 02/05/2021 
+
+
+# Open the logs of containers:
+
+sudo docker-compose -f docker-compose.yml logs -f
+
+
+sudo docker-compose -f docker-compose.yml exec taxi-server ls
+sudo docker-compose -f docker-compose.yml exec taxi-server python manage.py migrate
+sudo docker-compose -f docker-compose.yml exec taxi-server python -m pytest
+
+
+
+
+
+sudo docker-compose -f docker-compose.yml exec taxi-client sh
+sudo docker-compose -f docker-compose.yml exec taxi-client npx cypress open
