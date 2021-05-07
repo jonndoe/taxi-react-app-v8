@@ -87,7 +87,7 @@ function App () {
                   <Link
                     className='btn btn-primary'
                     to='/rider'
-                  >Dashboard</Link>
+                  >Riders Dashboard</Link>
                 )
               }
               {
@@ -95,7 +95,7 @@ function App () {
                   <Link
                     className='btn btn-primary'
                     to='/driver'
-                  >Dashboard</Link>
+                  >Drivers Dashboard</Link>
                 )
               }
             </div>

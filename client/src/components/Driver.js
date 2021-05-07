@@ -59,7 +59,6 @@ return (
         <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
       </Breadcrumb>
 
-      {/* changed */}
       <TripCard
         title='Current Trip'
         trips={getCurrentTrips()}
@@ -67,7 +66,13 @@ return (
         otherGroup='driver'
       />
 
-      {/* changed */}
+      <TripCard
+        title='Requested Trips'
+        trips={getRequestedTrips()}
+        group='rider'
+        otherGroup='driver'
+      />
+
       <TripCard
         title='Recent Trips'
         trips={getCompletedTrips()}
