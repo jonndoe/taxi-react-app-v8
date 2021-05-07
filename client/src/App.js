@@ -53,6 +53,15 @@ function App () {
         <Navbar.Toggle />
         <Navbar.Collapse>
           {
+            isRider() && (
+              <Nav className='mr-auto'>
+                <LinkContainer to='/rider/request'>
+                  <Nav.Link>Request a trip</Nav.Link>
+                </LinkContainer>
+              </Nav>
+            )
+          }
+          {
             isLoggedIn && (
             <Form inline className='ml-auto'>
               <Button type='button' onClick={ () => logOut() }>Log out</Button>
