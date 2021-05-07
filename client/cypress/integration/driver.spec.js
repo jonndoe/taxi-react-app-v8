@@ -135,4 +135,19 @@ describe('The driver dashboard', function () {
       .contains('COMPLETED');
   });
 
+  it('Shows details about a trip', () => {
+    cy.intercept('trip', {
+      statusCode: 200,
+      body: tripResponse[0]
+    }).as('getTrips');
+
+    cy.logIn(driverEmail);
+
+    cy.visit(`/#/driver/${tripResponse[0].id}`);
+
+    cy.get('[data-cy=trip-card]')
+      .should('have.length', 1)
+      .and('contain.text', 'STARTED');
+  });
+
 });

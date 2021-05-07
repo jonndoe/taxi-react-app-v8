@@ -1,3 +1,5 @@
+// client/src/components/RiderDetail.js
+
 import React, { useEffect, useState } from 'react';
 import {
   Breadcrumb, Card, Col, Row
@@ -7,7 +9,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import TripMedia from './TripMedia';
 import { getTrip } from '../services/TripService';
 
-function DriverDetail ({ match }) {
+function RiderDetail ({ match }) {
   const [trip, setTrip] = useState(null);
 
   useEffect(() => {
@@ -30,7 +32,7 @@ function DriverDetail ({ match }) {
     tripMedia = (
       <TripMedia
         trip={trip}
-        otherGroup='rider'
+        otherGroup='driver'
       />
     )
   }
@@ -39,7 +41,7 @@ function DriverDetail ({ match }) {
     <Row>
       <Col lg={12}>
         <Breadcrumb>
-          <LinkContainer to='/driver'>
+          <LinkContainer to='/rider'>
             <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
           </LinkContainer>
           <Breadcrumb.Item active>Trip</Breadcrumb.Item>
@@ -53,4 +55,4 @@ function DriverDetail ({ match }) {
   );
 }
 
-export default DriverDetail;
+export default RiderDetail;
