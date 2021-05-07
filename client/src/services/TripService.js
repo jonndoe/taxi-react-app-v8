@@ -4,6 +4,31 @@ import axios from 'axios';
 
 import { getAccessToken } from './AuthService';
 
+// For websckotes communication
+import { share } from 'rxjs/operators'; // new
+import { webSocket } from 'rxjs/webSocket'; // new
+
+let _socket;
+export let messages;
+
+export const connect = () => {
+  if (!_socket || _socket.closed) {
+    const token = getAccessToken();
+    _socket = webSocket(`ws://localhost:8003/taxi/?token=${token}`);
+    messages = _socket.pipe(share());
+    messages.subscribe(message => console.log(message));
+  }
+};
+
+export const createTrip = (trip) => {
+  connect();
+  const message = {
+    type: 'create.trip',
+    data: trip
+  };
+  _socket.next(message);
+};
+
 export const getTrip = async (id) => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/${id}/`;
   const token = getAccessToken();
